@@ -102,13 +102,14 @@ const FoodDetails: React.FC = () => {
   function handleDecrementExtra(id: number): void {
     const findExtra = extras.find(extra => extra.id === id);
 
-    if (findExtra && findExtra.quantity > 0) {
-      setExtras(
-        extras.map(extra =>
-          extra.id === id ? { ...extra, quantity: extra.quantity - 1 } : extra,
-        ),
-      );
-    }
+    if (!findExtra) return;
+    if (findExtra.quantity === 0) return;
+
+    setExtras(
+      extras.map(extra =>
+        extra.id === id ? { ...extra, quantity: extra.quantity - 1 } : extra,
+      ),
+    );
   }
 
   function handleIncrementFood(): void {
@@ -116,16 +117,16 @@ const FoodDetails: React.FC = () => {
   }
 
   function handleDecrementFood(): void {
-    if (foodQuantity > 0) {
-      setFoodQuantity(foodQuantity - 1);
-    }
+    if (foodQuantity === 1) return;
+
+    setFoodQuantity(foodQuantity - 1);
   }
 
   const toggleFavorite = useCallback(() => {
     if (isFavorite) {
-      api.delete(`/favorities/${food.id}`);
+      api.delete(`/favorites/${food.id}`);
     } else {
-      api.post('favorities', food);
+      api.post(`favorites`, food);
     }
 
     setIsFavorite(!isFavorite);
@@ -133,7 +134,7 @@ const FoodDetails: React.FC = () => {
 
   const cartTotal = useMemo(() => {
     const extraTotal = extras.reduce((accumulator, extra) => {
-      return accumulator + extra.quantity + extra.value;
+      return accumulator + extra.quantity * extra.value;
     }, 0);
 
     const foodTotal = food.price;

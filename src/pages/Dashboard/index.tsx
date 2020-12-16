@@ -72,7 +72,7 @@ const Dashboard: React.FC = () => {
         response.data.map((food: Food) => ({
           ...food,
           formattedPrice: formatValue(food.price),
-        }))
+        })),
       );
     }
 
@@ -90,7 +90,11 @@ const Dashboard: React.FC = () => {
   }, []);
 
   function handleSelectCategory(id: number): void {
-    selectedCategory(selectedCategory === id ? undefined : id);
+    if (selectedCategory === id) {
+      setSelectedCategory(undefined);
+    } else {
+      setSelectedCategory(id);
+    }
   }
 
   return (

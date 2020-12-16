@@ -23,7 +23,7 @@ interface Food {
   name: string;
   description: string;
   price: number;
-  formattedPrice: string;
+  formattedValue: number;
   thumbnail_url: string;
 }
 
@@ -38,7 +38,7 @@ const Orders: React.FC = () => {
         response.data.map((order: Food) => ({
           ...order,
           formattedPrice: formatValue(order.price),
-        }))
+        })),
       );
     }
 
